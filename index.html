@@ -42,6 +42,17 @@
                     <option value="Verdana">Verdana</option>
                 </select>
             </div>
+            <div class="font-size-select">
+                <select id="fontSizeSelect">
+                    <option value="12px">12px</option>
+                    <option value="14px">14px</option>
+                    <option value="16px">16px</option>
+                    <option value="18px">18px</option>
+                    <option value="20px">20px</option>
+                    <option value="22px">22px</option>
+                    <option value="24px">24px</option>
+                </select>
+            </div>
             <div id="data">
                 <div id="wordCount">Word Count: 0</div>
                 <div id="sentenceCount">Sentence Count: 0</div>
@@ -52,20 +63,12 @@
                 <button id="toLowerCase">Lower Case</button>
                 <button id="toUpperCase">Upper Case</button>
             </div>
-            <div id="textStatisticsContainer">
-                <h3>Text Statistics</h3>
-                <div id="readingTime">Reading Time: 0 min</div>
-                <div id="speakingTime">Speaking Time: 0 min</div>
-                <div id="readabilityScore">Readability Score: 0</div>
-            </div>
-            <div id="keyboardShortcuts">
-                <h3>Keyboard Shortcuts</h3>
-                <ul>
-                    <li><strong>Ctrl + Z:</strong> Undo</li>
-                    <li><strong>Ctrl + Y:</strong> Redo</li>
-                    <li><strong>Ctrl + S:</strong> Save</li>
-                </ul>
-            </div>
+        </div>
+        <div id="textStatisticsContainer">
+            <h3>Text Statistics</h3>
+            <div id="readingTime">Reading Time: 0 min</div>
+            <div id="speakingTime">Speaking Time: 0 min</div>
+            <div id="readabilityScore">Readability Score: 0</div>
         </div>
         <div id="additionalDataContainer">
             <h3>Additional Data</h3>
@@ -97,13 +100,14 @@
                 </div>
             </div>
         </div>
-        <button id="exportButton">
-            <img src="img/export.png" alt="Export" />
-        </button>
-        <select id="exportFormat">
-            <option value="json">JSON</option>
-            <option value="csv">CSV</option>
-        </select>
+        <div id="keyboardShortcuts">
+            <h3>Keyboard Shortcuts</h3>
+            <ul>
+                <li><strong>Ctrl + Z:</strong> Undo</li>
+                <li><strong>Ctrl + Y:</strong> Redo</li>
+                <li><strong>Ctrl + S:</strong> Save</li>
+            </ul>
+        </div>
         <div id="sidePanel">
             <div class="panel-toggle-buttons">
                 <button id="keywordDensityButton">Keyword Density</button>
@@ -115,5 +119,14 @@
         <button id="sidePanelToggle">
             <img src="img/up_arrow.png" alt="Toggle Sidebar" />
         </button>
+        <div id="export">
+            <button id="exportButton">
+                <img src="img/export.png" alt="Export" />
+            </button>
+            <select id="exportFormat">
+                <option value="json">JSON</option>
+                <option value="csv">CSV</option>
+            </select>
+        </div>
     </body>
 </html>

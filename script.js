@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const characterCountDisplay = document.getElementById("characterCount");
     const darkModeToggle = document.getElementById("darkModeToggle");
     const fontSelect = document.getElementById("fontSelect");
+    const fontSizeSelect = document.getElementById("fontSizeSelect");
     const body = document.body;
 
     const toSentenceCaseButton = document.getElementById("toSentenceCase");
@@ -42,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.addEventListener("keydown", handleKeyboardShortcuts);
 
-    if (!textArea || !wordCountDisplay || !sentenceCountDisplay || !characterCountDisplay || !darkModeToggle || !fontSelect || !toSentenceCaseButton || !toLowerCaseButton || !toUpperCaseButton || !sidePanel || !sidePanelToggle || !keywordDensityContent || !letterOccurrencesContent || !keywordDensityButton || !letterOccurrencesButton || !clearButton || !uniqueWordsDisplay || !charactersNoSpacesDisplay || !longestSentenceDisplay || !shortestSentenceDisplay || !avgSentenceWordsDisplay || !avgSentenceCharsDisplay || !avgWordLengthDisplay || !paragraphsDisplay || !pagesDisplay || !syllablesDisplay || !linesDisplay || !exportButton) {
+    if (!textArea || !wordCountDisplay || !sentenceCountDisplay || !characterCountDisplay || !darkModeToggle || !fontSelect || !toSentenceCaseButton || !toLowerCaseButton || !toUpperCaseButton || !sidePanel || !sidePanelToggle || !keywordDensityContent || !letterOccurrencesContent || !keywordDensityButton || !letterOccurrencesButton || !clearButton || !uniqueWordsDisplay || !charactersNoSpacesDisplay || !longestSentenceDisplay || !shortestSentenceDisplay || !avgSentenceWordsDisplay || !avgSentenceCharsDisplay || !avgWordLengthDisplay || !paragraphsDisplay || !pagesDisplay || !syllablesDisplay || !linesDisplay || !exportButton || !fontSizeSelect) {
         console.error("One or more elements are missing in the HTML.");
         return;
     }
@@ -58,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("keyup", updateSelectionStats);
     darkModeToggle.addEventListener("change", toggleDarkMode);
     fontSelect.addEventListener("change", changeFont);
+    fontSizeSelect.addEventListener("change", changeFontSize);
 
     toSentenceCaseButton.addEventListener("click", () => {
         textArea.value = toSentenceCase(textArea.value);
@@ -159,13 +161,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateSelectionStats() {
         const text = textArea.value.trim();
-        const selectedText = textArea.value.substring(textArea.selectionStart, textArea.selectionEnd).trim();
-        const selectedWordCount = selectedText ? selectedText.split(/\s+/).length : 0;
-        const selectedSentenceCount = selectedText ? selectedText.split(/[.!?]+/).filter(Boolean).length : 0;
-        const selectedCharacterCount = selectedText.length;
-        wordCountDisplay.textContent = `Word Count: ${selectedWordCount}/${text.split(/\s+/).length}`;
-        sentenceCountDisplay.textContent = `Sentence Count: ${selectedSentenceCount}/${text.split(/[.!?]+/).filter(Boolean).length}`;
-        characterCountDisplay.textContent = `Character Count: ${selectedCharacterCount}/${text.length}`;
+        const selectionStart = textArea.selectionStart;
+        const selectionEnd = textArea.selectionEnd;
+        if (selectionStart === selectionEnd) {
+            updateWordCount();
+            return;
+        }
+        const selectedText = textArea.value.substring(selectionStart, selectionEnd).trim();
+        if (selectedText) {
+            const selectedWordCount = selectedText.split(/\s+/).length;
+            const selectedSentenceCount = selectedText.split(/[.!?]+/).filter(Boolean).length;
+            const selectedCharacterCount = selectedText.length;
+            wordCountDisplay.textContent = `Word Count: ${selectedWordCount}/${text.split(/\s+/).length}`;
+            sentenceCountDisplay.textContent = `Sentence Count: ${selectedSentenceCount}/${text.split(/[.!?]+/).filter(Boolean).length}`;
+            characterCountDisplay.textContent = `Character Count: ${selectedCharacterCount}/${text.length}`;
+        } else {
+            updateWordCount();
+        }
     }
 
     function toggleDarkMode(event) {
@@ -180,6 +192,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function changeFont(event) {
         textArea.style.fontFamily = event.target.value;
+    }
+
+    function changeFontSize(event) {
+        textArea.style.fontSize = event.target.value;
     }
 
     function toSentenceCase(text) {

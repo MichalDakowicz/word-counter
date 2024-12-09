@@ -82,7 +82,9 @@ body.dark-mode #container {
     color: var(--text-color);
     border-color: var(--border-color);
 }
-#additionalDataContainer {
+#additionalDataContainer,
+#textStatisticsContainer,
+#keyboardShortcuts {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
@@ -279,19 +281,22 @@ img {
     }
 }
 
-.font-select {
-    margin-top: 10px;
-    display: flex;
+.font-select,
+.font-size-select {
+    display: inline-flex;
     align-items: center;
     gap: 10px;
+    margin-bottom: 20px;
 }
 
-.font-select label {
+.font-select label,
+.font-size-select label {
     font-size: 1rem;
     color: var(--text-color);
 }
 
-.font-select select {
+.font-select select,
+.font-size-select select {
     padding: 5px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
@@ -301,7 +306,8 @@ img {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-body.dark-mode .font-select select {
+body.dark-mode .font-select select,
+body.dark-mode .font-size-select select {
     background-color: var(--background-color);
     color: var(--text-color);
     border-color: var(--border-color);
@@ -309,7 +315,6 @@ body.dark-mode .font-select select {
 
 #textStatisticsContainer {
     margin-top: 20px;
-    padding: 15px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
     background-color: var(--background-color);
@@ -356,7 +361,7 @@ body.dark-mode .font-select select {
 }
 
 #exportFormat {
-    width: 140px; 
+    width: 140px;
     height: 70px;
     font-size: 1rem;
     padding: 0 10px;
@@ -375,7 +380,6 @@ body.dark-mode .font-select select {
 
 #keyboardShortcuts {
     margin-top: 20px;
-    padding: 15px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
     background-color: var(--background-color);
@@ -392,4 +396,21 @@ body.dark-mode .font-select select {
 #keyboardShortcuts li {
     margin-bottom: 5px;
     font-size: 1rem;
+}
+
+#export {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode #export {
+    background-color: var(--background-color);
+    border-color: var(--border-color);
 }
