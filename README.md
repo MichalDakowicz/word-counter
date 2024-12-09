@@ -24,7 +24,6 @@ This project is a simple yet powerful word counter and text analyzer built with 
 -   **Selection Stats:** Displays stats for the current text selection.
 -   **Responsive Design:** Adapts to different screen sizes for optimal usability on desktops, tablets, and mobile devices.
 -   **Export Formats:** Export analysis data in **JSON** and **CSV** formats.
-    <!-- Removed PDF and DOCX export features due to unresolved issues. -->
 
 ## How to Use
 
