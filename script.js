@@ -31,6 +31,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const syllablesDisplay = document.getElementById("syllables");
     const linesDisplay = document.getElementById("lines");
 
+    const readingTimeDisplay = document.getElementById("readingTime");
+    const speakingTimeDisplay = document.getElementById("speakingTime");
+    const readabilityScoreDisplay = document.getElementById("readabilityScore");
+
+    const exportFormatSelect = document.getElementById("exportFormat");
+
+    let undoStack = [];
+    let redoStack = [];
+
+    document.addEventListener("keydown", handleKeyboardShortcuts);
+
     if (!textArea || !wordCountDisplay || !sentenceCountDisplay || !characterCountDisplay || !darkModeToggle || !fontSelect || !toSentenceCaseButton || !toLowerCaseButton || !toUpperCaseButton || !sidePanel || !sidePanelToggle || !keywordDensityContent || !letterOccurrencesContent || !keywordDensityButton || !letterOccurrencesButton || !clearButton || !uniqueWordsDisplay || !charactersNoSpacesDisplay || !longestSentenceDisplay || !shortestSentenceDisplay || !avgSentenceWordsDisplay || !avgSentenceCharsDisplay || !avgWordLengthDisplay || !paragraphsDisplay || !pagesDisplay || !syllablesDisplay || !linesDisplay || !exportButton) {
         console.error("One or more elements are missing in the HTML.");
         return;
@@ -41,6 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
         updateKeywordDensity();
         updateLetterOccurrences();
         updateAdditionalData();
+        updateTextStatistics();
     });
     document.addEventListener("mouseup", updateSelectionStats);
     document.addEventListener("keyup", updateSelectionStats);
@@ -53,6 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
         updateKeywordDensity();
         updateLetterOccurrences();
         updateAdditionalData();
+        updateTextStatistics();
     });
 
     toLowerCaseButton.addEventListener("click", () => {
@@ -61,6 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
         updateKeywordDensity();
         updateLetterOccurrences();
         updateAdditionalData();
+        updateTextStatistics();
     });
 
     toUpperCaseButton.addEventListener("click", () => {
@@ -69,6 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
         updateKeywordDensity();
         updateLetterOccurrences();
         updateAdditionalData();
+        updateTextStatistics();
     });
 
     clearButton.addEventListener("click", () => {
@@ -77,6 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
         updateKeywordDensity();
         updateLetterOccurrences();
         updateAdditionalData();
+        updateTextStatistics();
     });
 
     sidePanelToggle.addEventListener("click", () => {
@@ -121,34 +137,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     exportButton.addEventListener("click", () => {
-        const text = textArea.value.trim();
-        const data = {
-            "Text": text,
-            "Word Count": wordCountDisplay.textContent,
-            "Sentence Count": sentenceCountDisplay.textContent,
-            "Character Count": characterCountDisplay.textContent,
-            "Unique Words": uniqueWordsDisplay.textContent,
-            "Characters (no spaces)": charactersNoSpacesDisplay.textContent,
-            "Longest Sentence (words)": longestSentenceDisplay.textContent,
-            "Shortest Sentence (words)": shortestSentenceDisplay.textContent,
-            "Avg. Sentence (words)": avgSentenceWordsDisplay.textContent,
-            "Avg. Sentence (chars)": avgSentenceCharsDisplay.textContent,
-            "Avg. Word Length": avgWordLengthDisplay.textContent,
-            "Paragraphs": paragraphsDisplay.textContent,
-            "Pages": pagesDisplay.textContent,
-            "Syllables": syllablesDisplay.textContent,
-            "Lines": linesDisplay.textContent
-        };
+        const format = exportFormatSelect.value;
+        exportData(format);
+    });
 
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "text_analysis.json";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+    textArea.addEventListener("input", () => {
+        undoStack.push(textArea.value);
+        if (undoStack.length > 100) undoStack.shift();
+        redoStack = [];
     });
 
     function updateWordCount() {
@@ -237,7 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const avgSentenceChars = sentences.length ? (charactersNoSpaces / sentences.length).toFixed(2) : 0;
         const avgWordLength = words.length ? (charactersNoSpaces / words.length).toFixed(2) : 0;
         const paragraphs = text.split(/\n+/).filter(Boolean).length;
-        const pages = (words.length / 250).toFixed(2); // Assuming 250 words per page
+        const pages = (words.length / 250).toFixed(2);
         const syllables = words.reduce((acc, word) => acc + countSyllables(word), 0);
         const lines = text.split(/\n/).length;
 
@@ -263,6 +259,144 @@ document.addEventListener("DOMContentLoaded", () => {
         return syllableMatch ? syllableMatch.length : 1;
     }
 
+    function updateTextStatistics() {
+        const text = textArea.value.trim();
+        const words = text.split(/\s+/).length;
+        const readingTime = (words / 200).toFixed(2);
+        const speakingTime = (words / 130).toFixed(2);
+        const readabilityScore = calculateReadability(text);
+
+        readingTimeDisplay.textContent = `Reading Time: ${readingTime} min`;
+        speakingTimeDisplay.textContent = `Speaking Time: ${speakingTime} min`;
+        readabilityScoreDisplay.textContent = `Readability Score: ${readabilityScore}`;
+    }
+
+    function calculateReadability(text) {
+        const sentences = text.split(/[.!?]+/).filter(Boolean).length || 1;
+        const words = text.split(/\s+/).length || 1;
+        const syllables = words > 0 ? text.split(/\s+/).reduce((acc, word) => acc + countSyllables(word), 0) : 0;
+        const ASL = words / sentences;
+        const ASW = syllables / words;
+        const flesch = 206.835 - (1.015 * ASL) - (84.6 * ASW);
+        return flesch.toFixed(2);
+    }
+
+    function undo() {
+        if (undoStack.length > 0) {
+            redoStack.push(textArea.value);
+            const previousValue = undoStack.pop();
+            textArea.value = previousValue;
+            updateWordCount();
+            updateKeywordDensity();
+            updateLetterOccurrences();
+            updateAdditionalData();
+            updateTextStatistics();
+        }
+    }
+
+    function redo() {
+        if (redoStack.length > 0) {
+            undoStack.push(textArea.value);
+            const nextValue = redoStack.pop();
+            textArea.value = nextValue;
+            updateWordCount();
+            updateKeywordDensity();
+            updateLetterOccurrences();
+            updateAdditionalData();
+            updateTextStatistics();
+        }
+    }
+
+    function handleKeyboardShortcuts(e) {
+        if (e.ctrlKey) {
+            switch (e.key.toLowerCase()) {
+                case 'z':
+                    e.preventDefault();
+                    undo();
+                    break;
+                case 'y':
+                    e.preventDefault();
+                    redo();
+                    break;
+                case 'f':
+                    e.preventDefault();
+                    // Focus on Find Text input
+                    document.getElementById("findText").focus();
+                    break;
+                case 's':
+                    e.preventDefault();
+                    exportData(exportFormatSelect.value);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    function exportData(format) {
+        const text = textArea.value.trim();
+        const data = {
+            "Text": text,
+            "Word Count": wordCountDisplay.textContent,
+            "Sentence Count": sentenceCountDisplay.textContent,
+            "Character Count": characterCountDisplay.textContent,
+            "Unique Words": uniqueWordsDisplay.textContent,
+            "Characters (no spaces)": charactersNoSpacesDisplay.textContent,
+            "Longest Sentence (words)": longestSentenceDisplay.textContent,
+            "Shortest Sentence (words)": shortestSentenceDisplay.textContent,
+            "Avg. Sentence (words)": avgSentenceWordsDisplay.textContent,
+            "Avg. Sentence (chars)": avgSentenceCharsDisplay.textContent,
+            "Avg. Word Length": avgWordLengthDisplay.textContent,
+            "Paragraphs": paragraphsDisplay.textContent,
+            "Pages": pagesDisplay.textContent,
+            "Syllables": syllablesDisplay.textContent,
+            "Lines": linesDisplay.textContent,
+            "Reading Time": readingTimeDisplay.textContent,
+            "Speaking Time": speakingTimeDisplay.textContent,
+            "Readability Score": readabilityScoreDisplay.textContent
+        };
+
+        switch(format) {
+            case 'json':
+                downloadJSON(data);
+                break;
+            case 'csv':
+                downloadCSV(data);
+                break;
+            default:
+                alert("Unsupported export format.");
+        }
+    }
+
+    function downloadJSON(data) {
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "text_analysis.json";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    function downloadCSV(data) {
+        const csvRows = [];
+        for (const key in data) {
+            csvRows.push(`"${key}","${data[key]}"`);
+        }
+        const csvContent = csvRows.join("\n");
+        const blob = new Blob([csvContent], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "text_analysis.csv";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
     if (localStorage.getItem("darkMode") === "enabled") {
         body.classList.add("dark-mode");
         darkModeToggle.checked = true;
@@ -272,4 +406,5 @@ document.addEventListener("DOMContentLoaded", () => {
     updateKeywordDensity();
     updateLetterOccurrences();
     updateAdditionalData();
+    updateTextStatistics();
 });
