@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Word Counter</title>
+        <link rel="stylesheet" href="style.css" />
+        <script src="script.js" defer></script>
+    </head>
+    <body>
+        <div id="container">
+            <div id="top">
+                <h1>Word Counter</h1>
+                <div class="toggle-container">
+                    <label class="toggle">
+                        <b>Dark Mode</b>
+                        <input type="checkbox" id="darkModeToggle" />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="textarea-container">
+                <textarea
+                    id="textArea"
+                    placeholder="Type or paste your text here..."
+                ></textarea>
+                <button class="clear-button" id="clearButton">
+                    <img src="img/trash_can.png" alt="Clear" />
+                </button>
+            </div>
+            <div class="font-select">
+                <label for="fontSelect">Font:</label>
+                <select id="fontSelect">
+                    <option value="Nunito Sans">Nunito Sans</option>
+                    <option value="Roboto Mono">Roboto Mono</option>
+                    <option value="Ubuntu">Ubuntu</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Verdana">Verdana</option>
+                </select>
+            </div>
+            <div id="data">
+                <div id="wordCount">Word Count: 0</div>
+                <div id="sentenceCount">Sentence Count: 0</div>
+                <div id="characterCount">Character Count: 0</div>
+            </div>
+            <div class="case-buttons">
+                <button id="toSentenceCase">Sentence Case</button>
+                <button id="toLowerCase">Lower Case</button>
+                <button id="toUpperCase">Upper Case</button>
+            </div>
+        </div>
+        <div id="additionalDataContainer">
+            <h3>Additional Data</h3>
+            <div id="additionalData">
+                <div class="data-row">
+                    <div id="uniqueWords">Unique Words: 0</div>
+                    <div id="charactersNoSpaces">Characters (no spaces): 0</div>
+                </div>
+                <div class="data-row">
+                    <div id="longestSentence">Longest Sentence (words): 0</div>
+                    <div id="shortestSentence">
+                        Shortest Sentence (words): 0
+                    </div>
+                </div>
+                <div class="data-row">
+                    <div id="avgSentenceWords">Avg. Sentence (words): 0</div>
+                    <div id="avgSentenceChars">Avg. Sentence (chars): 0</div>
+                </div>
+                <div class="data-row">
+                    <div id="avgWordLength">Avg. Word Length: 0</div>
+                    <div id="paragraphs">Paragraphs: 0</div>
+                </div>
+                <div class="data-row">
+                    <div id="pages">Pages: 0</div>
+                    <div id="syllables">Syllables: 0</div>
+                </div>
+                <div class="data-row">
+                    <div id="lines">Lines: 0</div>
+                </div>
+            </div>
+        </div>
+        <button id="exportButton"><img src="img/export.png" alt="" /></button>
+        <div id="sidePanel">
+            <div class="panel-toggle-buttons">
+                <button id="keywordDensityButton">Keyword Density</button>
+                <button id="letterOccurrencesButton">Letter Occurrences</button>
+            </div>
+            <div id="keywordDensityContent" class="panel-content active"></div>
+            <div id="letterOccurrencesContent" class="panel-content"></div>
+        </div>
+        <button id="sidePanelToggle">
+            <img src="img/up_arrow.png" alt="Toggle Sidebar" />
+        </button>
+    </body>
+</html>

@@ -1,0 +1,308 @@
+/* with dark mode and color variables, make responsive */
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
+
+:root {
+    --background-color: #fff;
+    --text-color: #000;
+    --border-color: #ccc;
+    --button-bg-color: #4caf50;
+    --button-hover-bg-color: #45a049;
+}
+body {
+    font-family: "Nunito Sans", sans-serif;
+    padding: 2rem;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+body.dark-mode {
+    --background-color: #333;
+    --text-color: #eee;
+    --border-color: #666;
+    --button-bg-color: #555;
+    --button-hover-bg-color: #444;
+}
+button {
+    padding: 10px 20px;
+    background-color: var(--button-bg-color);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+button:hover {
+    background-color: var(--button-hover-bg-color);
+}
+.textarea-container {
+    position: relative;
+}
+.clear-button {
+    position: absolute;
+    bottom: 26px;
+    right: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+textarea {
+    width: 100%;
+    height: 300px;
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    resize: vertical;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    box-sizing: border-box;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-family: "Roboto Mono", monospace;
+}
+body.dark-mode textarea {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+#container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+body.dark-mode #container {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+#additionalDataContainer {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+body.dark-mode #additionalDataContainer {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+#sidePanel {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 250px;
+    height: 100%;
+    padding: 20px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-left: 1px solid var(--border-color);
+    box-shadow: -2px 0 4px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+#sidePanel.collapsed {
+    transform: translateX(100%);
+}
+#sidePanelToggle {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%) rotate(270deg);
+    transform-origin: right top;
+    padding: 5px;
+    width: 40px;
+    height: 40px;
+    background-color: var(--button-bg-color);
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px 4px 0 0;
+    transition: background-color 0.3s ease, right 0.3s ease;
+}
+#sidePanel.collapsed + #sidePanelToggle {
+    right: 40px;
+}
+#sidePanel:not(.collapsed) + #sidePanelToggle {
+    right: 330px;
+}
+#sidePanelToggle:hover {
+    background-color: var(--button-hover-bg-color);
+}
+body.dark-mode #sidePanel {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+body.dark-mode #sidePanelToggle {
+    background-color: var(--button-bg-color);
+    color: #fff;
+}
+#sidePanel h2 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+#sidePanel ul {
+    list-style: none;
+    padding: 0;
+}
+#sidePanel li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border-color);
+}
+#sidePanel li span:last-child {
+    text-align: right;
+    flex: 0 0 100px;
+}
+#sidePanel li:last-child {
+    border-bottom: none;
+}
+#sidePanel .panel-content {
+    display: none;
+}
+#sidePanel .panel-content.active {
+    display: block;
+}
+#sidePanel .panel-toggle-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+#sidePanel .panel-toggle-buttons button {
+    flex: 1;
+    margin: 0 5px;
+    padding: 5px;
+    background-color: var(--button-bg-color);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+#sidePanel .panel-toggle-buttons button:hover {
+    background-color: var(--button-hover-bg-color);
+}
+#sentenceCount,
+#characterCount,
+#wordCount {
+    font-size: 1rem;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+}
+.case-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+.case-buttons button {
+    flex: 1;
+}
+#top {
+    display: flex;
+    justify-content: space-between;
+}
+.toggle-container {
+    display: flex;
+    align-items: center;
+}
+img {
+    width: 30px;
+    height: 30px;
+}
+#data {
+    display: flex;
+    justify-content: space-between;
+}
+.data-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.data-row div {
+    flex: 1;
+    margin-right: 10px;
+}
+.data-row div:last-child {
+    margin-right: 0;
+}
+#exportButton {
+    width: 70px;
+    height: 70px;
+}
+/* Media Queries */
+@media screen and (max-width: 600px) {
+    .controls {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    .language-select {
+        margin-bottom: 10px;
+    }
+    #question {
+        font-size: 1rem;
+    }
+    .answer {
+        font-size: 0.9rem;
+    }
+    #sidePanel {
+        transform: translateX(0);
+    }
+    #sidePanel.collapsed {
+        transform: translateX(100%);
+    }
+    #sidePanelToggle {
+        right: 0;
+    }
+    #sidePanel:not(.collapsed) + #sidePanelToggle {
+        right: 330px;
+    }
+}
+@media screen and (max-width: 454px) {
+    #buttons button {
+        padding-right: 0;
+        padding-left: 0;
+        width: 32.5% !important;
+    }
+}
+
+.font-select {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.font-select label {
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.font-select select {
+    padding: 5px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode .font-select select {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
